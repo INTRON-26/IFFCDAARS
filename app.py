@@ -63,6 +63,18 @@ class UserLoginData(db.Model,UserMixin):
     email = db.Column(db.String(200), nullable = True)
     password = db.Column(db.String(200), nullable = False)
     age = db.Column(db.Integer,nullable = True)
+
+class UserPersonalData(db.Model,UserMixin):
+    __tablename__ = "user_personal_details_final1"
+    id = db.Column(db.Integer,primary_key=True)
+    user_id = db.Column(db.Integer ,nullable = False, primary_key=True)
+    age = db.Column(db.Integer, nullable = False)
+    phone_number = db.Column(db.String(10), nullable = False)
+    area = db.Column(db.String(50), nullable = False)
+    village = db.Column(db.String(50),nullable = False)
+    state = db.Column(db.String(50),nullable = False)
+    no_of_acres = db.Column(db.Float,nullable = False)
+    land_value = db.Column(db.Float,nullable = True)
     
 class UserCRSHistory(db.Model):
     __tablename__ = "user_crs_history_final"
@@ -76,6 +88,13 @@ class UserCRSHistory(db.Model):
     ph = db.Column(db.Float,nullable = False)
     rainfall = db.Column(db.Float,nullable = False)
     prediction = db.Column(db.String(200), nullable = False)
+
+class UserCDSHistory(db.Model):
+    __tablename__ = "user_cds_history_final"
+    id = db.Column(db.Integer, primary_key = True,nullable=False)
+    user_id = db.Column(db.Integer ,nullable = False)
+    img_path = db.Column(db.String(250) ,nullable=False)
+    prediction = db.Column(db.String(250) ,nullable = False)
 
 with app.app_context():
     db.create_all()
@@ -130,7 +149,7 @@ def register_page():
 def home_page():
     return render_template('home.html')
 
-@app.route('/index')
+@app.route('/index', methods = ['GET','POST'])
 @login_required
 def ai_engine_page():
     return render_template('index.html')
@@ -178,7 +197,7 @@ def predict():
         result = "Sorry, we could not determine the best crop to be cultivated with the provided data."
     return render_template('index2.html',result = result)
 
-@app.route('/submit')
+@app.route('/submit', methods = ['GET','POST'])
 @login_required
 def submit():
     if request.method == 'POST':
@@ -195,10 +214,16 @@ def submit():
         supplement_name = supplement_info['supplement name'][pred]
         supplement_image_url = supplement_info['supplement image'][pred]
         supplement_buy_link = supplement_info['buy link'][pred]
+        user_id_input = current_user.id
+        
+        new_entry = UserCDSHistory( user_id = user_id_input, img_path = image_url, prediction = title)
+        db.session.add(new_entry)
+        db.session.commit()
+
         return render_template('submit.html' , title = title , desc = description , prevent = prevent , 
                                image_url = image_url , pred = pred ,sname = supplement_name , simage = supplement_image_url , buy_link = supplement_buy_link)
 
-@app.route('/market')
+@app.route('/market', methods = ['GET','POST'])
 @login_required
 def market():
     return render_template('market.html', supplement_image = list(supplement_info['supplement image']),
@@ -217,18 +242,59 @@ def profile():
             'age' : current_user.age
             
         }
-    
+        flag = True
+        try:
+            more_details = UserPersonalData.query.filter_by(user_id = current_user.id).first()
+            flag = False
+        except:
+            flag = True
         history = UserCRSHistory.query.filter_by(user_id = current_user.id).order_by(UserCRSHistory.id.desc())
-        print(history)
-        return render_template('profile.html', details = details,history = history)
+        history_cds = UserCDSHistory.query.filter_by(user_id = current_user.id).order_by(UserCDSHistory.id.desc())
+        return render_template('profile.html', details = details,history = history, history_cds = history_cds,flag=flag)
     else:
         # User is not logged in, handle accordingly
         return {'message': 'You are not logged in.'}
+    
+@app.route("/more-details",methods = ['GET','POST'])
+def more_details():
+    if request.method == 'POST':
+        return render_template('add-more-details.html')
+    if request.method == 'GET':
+        more_details = UserPersonalData.query.filter_by(user_id = current_user.id).first()
+        details = {
+            'age' : more_details.age,
+            'phone' : more_details.phone_number,
+            'area' : more_details.area,
+            'village' : more_details.village,
+            'state' : more_details.state,
+            'no_of_acres' : more_details.no_of_acres,
+            'land_value':more_details.land_value
+        }
+        print(details)
+        return render_template('show-more-details.html', details = details)
 
-# @app.route('/current_user',methods=['GET','POST'])
-# @login_required
-# def current_user():
-#     return load_user(current_user_id).username
+@app.route("/add-more-details",methods = ['POST'])
+def add_more_details():
+    if request.method == 'POST':
+        user_id = current_user.id
+        age = request.form['age']
+        phone = request.form['phone']
+        area = request.form['area']
+        village = request.form['village']
+        state = request.form['state']
+        no_of_acres = request.form['#acres']
+        land_value = request.form['landvalue']
+        new_entry = UserPersonalData(user_id = user_id,age = age, phone_number = phone, area = area, state=state,village = village, no_of_acres=no_of_acres, land_value = land_value)
+        db.session.add(new_entry)
+        db.session.commit()
+        return "Success"
+    
+@app.route('/dummy-add',methods = ['POST'])
+@login_required
+def dummy():
+    new_entry = UserPersonalData(user_id = current_user.id,age = 35, phone_number = '9987548832', area = 'Tenali', village = 'Andhra Pradesh', no_of_acres=2.34, land_value = 1020345)
+    db.session.add(new_entry)
+    db.session.commit()
 
 if __name__ == '__main__':
     app.run(debug=True)

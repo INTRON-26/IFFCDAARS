@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block pagetitle %}
+Contact Us
+{% endblock pagetitle %}
+
+{% block body %}
+
+
+<div>
+    <label>Age: </label> <input placeholder="{{details.age}}" />
+    <label>Phone: </label> <input placeholder="{{details.phone}}"/>
+    <label>Area: </label> <input placeholder="{{details.area}}"/>
+    <label>Village: </label> <input placeholder="{{details.village}}"/>
+    <label>State: </label> <input placeholder="{{details.state}}"/>
+    <label>No of Acres: </label> <input placeholder="{{details.no_of_acres}}"/>
+    <label>Land Value:</label> <input placeholder="{{details.land_value}}" />
+</div>
+{% endblock body %}

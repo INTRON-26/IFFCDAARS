@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     
     <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/bttn.css/0.2.4/bttn.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <title> {% block pagetitle %}
 
@@ -142,16 +143,16 @@
         <div class="collapse navbar-collapse top-bar" id="navbarNavDropdown">
             <ul class="navbar-nav ">
                 <li class="navbar-brand active">
-                    <a class="nav-link" id = "link1" href="/home" >Home</a>
+                    <a class="nav-link" id = "link1" href="/home" >Home <i class="fa fa-home"></i></a>
                 </li>
                 <li class="navbar-brand active">
-                    <a class="nav-link" id = "link2" href="/index" >CDD</a>
+                    <a class="nav-link" id = "link2" href="/index" >CDD <i class="fa fa-camera"></i></a>
                 </li>
                 <li class="navbar-brand active">
-                    <a class="nav-link" id = "link3" href="/index2" >CRS</a>
+                    <a class="nav-link" id = "link3" href="/index2" >CRS  <i class="fa fa-leaf"></i></a>
                 </li>
                 <li class="navbar-brand">
-                    <a class="nav-link" id = "link4" href="/market" >Supplements</a>
+                    <a class="nav-link" id = "link4" href="/market" >Supplements <i class="fa fa-medkit"></i></a>
                 </li>
                 <!-- <li class="navbar-brand">
                     <a class="nav-link" href="/contact" >Contact-Us</a>
@@ -159,21 +160,21 @@
             </ul>
             <ul class = "navbar-nav ">
                 <li class="navbar-brand active">
-                    <a class="nav-link" href="/profile" style="color: white;">PROFILE</a>
+                    <a class="nav-link" href="/profile" id = "link5" style="color: white;">Profile <i class="fa fa-address-card-o"></i></a>
                 </li>
                 <li class="navbar-brand active ">
-                    <a class="nav-link" href="/logout" style="color: white;">LOGOUT</a>
+                    <a class="nav-link" href="/logout" id = "link6" style="color: white;">LOGOUT</a>
                 </li>
             </ul>
         </div>
     </nav>
     <style>
-        #link1, #link2, #link3, #link4 {
+        #link1, #link2, #link3, #link4, #link5, #link6 {
             font-size: x-large;
             color: white;
             font-family: sans-serif;
         }
-        #link1:hover, #link2:hover, #link3:hover, #link4:hover {
+        #link1:hover, #link2:hover, #link3:hover, #link4:hover, #link5:hover, #link6:hover {
             color: white;
             /* text-decoration: underline; */
             transition: 200ms;
