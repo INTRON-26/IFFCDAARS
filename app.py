@@ -64,6 +64,34 @@ class UserLoginData(db.Model,UserMixin):
     password = db.Column(db.String(200), nullable = False)
     age = db.Column(db.Integer,nullable = True)
 
+class UserCropData(db.Model,UserMixin):
+    __tablename__ = "user_crop_data_temp3"
+    # Crop Details Section
+    id = db.Column(db.Integer,primary_key = True)
+    user_id = db.Column(db.Integer,nullable = False)
+    year = db.Column(db.Integer,nullable = False)
+    season = db.Column(db.String(10),nullable=False)
+    type_of_crop = db.Column(db.String(50), nullable=False)
+    percent_of_land = db.Column(db.Float,nullable = False)
+    yield_in_kilos = db.Column(db.Float,nullable=False)
+    revenue = db.Column(db.Integer,nullable = False)
+    profit = db.Column(db.Float,nullable = False)
+    market_value_per_kilo = db.Column(db.Integer,nullable = False)
+    # Soil Details Section
+    soil_type = db.Column(db.String(50), nullable=False)
+    nitrogen = db.Column(db.Float,nullable = False)
+    phosphorus = db.Column(db.Float,nullable = False)
+    pottasium = db.Column(db.Float,nullable = False)
+    temp = db.Column(db.Float,nullable = False)
+    humidity = db.Column(db.Float,nullable = False)
+    ph = db.Column(db.Float,nullable = False)
+    rainfall = db.Column(db.Float,nullable = False)
+    prediction = db.Column(db.String(200), nullable = False)
+    __table_args__ = tuple(db.UniqueConstraint('year', 'season', name='_year_season_uc'))
+        
+    
+
+
 class UserPersonalData(db.Model,UserMixin):
     __tablename__ = "user_personal_details_final1"
     id = db.Column(db.Integer,primary_key=True)
@@ -164,6 +192,102 @@ def index2():
 def mobile_device_detected_page():
     return render_template('mobile-device.html')
 
+@app.route('/crop-data-analytics')
+@login_required
+def crop_data_analytics():
+    return render_template('crop-data-analytics.html')
+
+@app.route('/add-crop-data-form',methods=['POST'])
+@login_required
+def add_crop_data_form():
+    if request.method == 'POST':
+        year = request.form['year']
+        season = request.form['season']
+        type_of_crop = request.form['type_of_crop']
+        percent_of_land = request.form['percent_of_land']
+        yield_in_kilos = request.form['yield_in_kilos']
+        revenue = request.form['revenue']
+        profit = request.form['profit']
+        market_value_per_kilo = request.form['market_value_per_kilo']
+        soil_type = request.form['soil_type']
+        nitrogen = request.form['nitrogen']
+        phosphorus = request.form['phosphorus']
+        pottasium = request.form['pottasium']
+        temp = request.form['temp']
+        humidity = request.form['humidity']
+        ph = request.form['ph']
+        rainfall = request.form['rainfall']
+
+        feature_list = [nitrogen,phosphorus,pottasium,temp,humidity,ph,rainfall]
+        single_pred = np.array(feature_list).reshape(1, -1)
+        scaled_features = ms.transform(single_pred)
+        final_features = sc.transform(scaled_features)
+        prediction_index = model_1.predict(final_features)
+        crop_dict = {1: "Rice", 2: "Maize", 3: "Jute", 4: "Cotton", 5: "Coconut", 6: "Papaya", 7: "Orange",
+                 8: "Apple", 9: "Muskmelon", 10: "Watermelon", 11: "Grapes", 12: "Mango", 13: "Banana",
+                 14: "Pomegranate", 15: "Lentil", 16: "Blackgram", 17: "Mungbean", 18: "Mothbeans",
+                 19: "Pigeonpeas", 20: "Kidneybeans", 21: "Chickpea", 22: "Coffee"}
+        prediction = "Apple"
+        if prediction_index[0] in crop_dict:
+            prediction = crop_dict[prediction_index[0]]
+
+        new_entry = UserCropData(
+            year = year,
+            season = season,
+            type_of_crop = type_of_crop,
+            percent_of_land = percent_of_land,
+            yield_in_kilos = yield_in_kilos,
+            revenue = revenue,
+            profit = profit,
+            market_value_per_kilo = market_value_per_kilo,
+            soil_type = soil_type,
+            nitrogen = nitrogen,
+            phosphorus = phosphorus,
+            pottasium = pottasium,
+            temp = temp,
+            humidity = humidity,
+            ph = ph,
+            rainfall = rainfall,
+            prediction = prediction,
+            user_id = current_user.id
+        )
+        existing_entry = UserCropData.query.filter_by(user_id=current_user.id, year=year,season=season)
+        print(existing_entry.count())
+        if existing_entry.count() == 0:
+            db.session.add(new_entry)
+            db.session.commit()
+        else:
+            return "Cant Add Entry"
+        data = {
+            'year':year,
+            'season':season,
+            'type_of_crop':type_of_crop,
+            'percent_of_land':percent_of_land,
+            'yield_in_kilos':yield_in_kilos,
+            'revenue' : revenue,
+            'profit' : profit,
+            'market_value_per_kilo': market_value_per_kilo,
+            'soil_type' : soil_type,
+            'nitrogen' : nitrogen,
+            'phosphorus' : phosphorus,
+            'pottasium' : pottasium,
+            'temp' : temp,
+            'humidity' : humidity,
+            'ph' : ph,
+            'rainfall' : rainfall,
+            'prediction' : prediction,
+            'user_id' : current_user.id
+        }
+        print(data)
+        return render_template('index.html')
+
+@app.route('/add-crop-data',methods=['POST','GET'])
+@login_required
+def get_crop_data():
+    if request.method == 'GET':
+        return render_template('get-crop-data.html')
+    
+
 @app.route('/predict', methods = ["POST","GET"])
 @login_required
 def predict():
@@ -261,7 +385,11 @@ def more_details():
         return render_template('add-more-details.html')
     if request.method == 'GET':
         more_details = UserPersonalData.query.filter_by(user_id = current_user.id).first()
+        user_details = UserLoginData.query.filter_by(id = current_user.id).first()
         details = {
+            'fullname':user_details.fullname,
+            'username':user_details.username,
+            'email':user_details.email,
             'age' : more_details.age,
             'phone' : more_details.phone_number,
             'area' : more_details.area,

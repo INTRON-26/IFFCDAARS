@@ -6,13 +6,63 @@ Contact Us
 {% block body %}
 
 
-<div>
-    <label>Age: </label> <input placeholder="{{details.age}}" />
-    <label>Phone: </label> <input placeholder="{{details.phone}}"/>
-    <label>Area: </label> <input placeholder="{{details.area}}"/>
-    <label>Village: </label> <input placeholder="{{details.village}}"/>
-    <label>State: </label> <input placeholder="{{details.state}}"/>
-    <label>No of Acres: </label> <input placeholder="{{details.no_of_acres}}"/>
-    <label>Land Value:</label> <input placeholder="{{details.land_value}}" />
-</div>
+<center>
+    <div class="more-details-container">
+        <br>
+        <center>
+            <h1 style="font-weight: bold;">Details</h1>
+        </center>
+        <label>Full Name: </label> <input placeholder="{{details.fullname}}" />  <br>
+        <label>Username: </label> <input placeholder="{{details.username}}" /> <br>
+        <label>Email: </label> <input placeholder="{{details.email}}" /> <br>
+        <label>Age: </label> <input placeholder="{{details.age}}" /> <br>
+        <label>Phone: </label> <input placeholder="{{details.phone}}"/> <br>
+        <label>Area: </label> <input placeholder="{{details.area}}"/> <br>
+        <label>Village: </label> <input placeholder="{{details.village}}"/> <br>
+        <label>State: </label> <input placeholder="{{details.state}}"/> <br>
+        <label>No of Acres: </label> <input placeholder="{{details.no_of_acres}}"/> <br>
+        <label>Land Value:</label> <input placeholder="{{details.land_value}}" /> <br> <br>
+        <center>
+            <a href="/profile" >
+                <button class="more-details-back-button">Back</button>
+            </a>
+        </center>
+    </div>
+</center>
+<style>
+    .more-details-container {
+        width: 800px;
+        height: 875px;
+        position: relative;
+        top: 10vh;
+        background-color: white;
+        border-radius: 40px;
+    }
+    label {
+        height: 50px;
+        width: 200px;
+        border-radius: 10px;
+        margin-right: 10px;
+    }
+    input {
+        height: 50px;
+        width: 400px;
+        text-align: center;
+        font-weight: bold;
+        font-family: sans-serif;
+        border-radius: 10px;
+    }
+    .more-details-back-button {
+        height: 50px;
+        width: 150px;
+        background-color: #196f3d;
+        color: #d4efdf;
+        border-radius: 10px;
+    }
+    .more-details-back-button:hover {
+        transform: scale(1.1);
+        transition: 200ms;
+        
+    }
+</style>
 {% endblock body %}

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block pagetitle %}
+Contact Us
+{% endblock pagetitle %}
+
+{% block body %}
+
+        <div class="CDA-container-outside">
+            <form method="post" action="/add-crop-data-form">
+                <center>
+                    <h1>Add your Crop Data for Insights</h1> <br>
+                </center>
+                <center>
+                    <label  style="background-color: rgb(170, 59, 59);">Year:</label>
+                <select class="select-class" id = "year" name="year" required>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                </select>
+                <label style="background-color: rgb(170, 59, 59);">Season:</label>
+                <select class="select-class" id = "season" name="season" required>
+                    <option value="Spring">Spring</option>
+                    <option value="Summer">Summer</option>
+                    <option value="Autumn">Autumn</option>
+                    <option value="Winter">Winter</option>
+                </select>
+                </center> 
+                <br>
+                <div class="CDA-container-inside">
+                    <div class="CDA-Crops">
+                        <label>Type of Crop</label> 
+                        <select  class="select-class" name="type_of_crop" id="type_of_crop" required>
+                            <option value="Wheat">Wheat</option>
+                            <option value="Rice">Rice</option>
+                            <option value="Corn">Corn</option>
+                            <option value="Soybeans">Soybeans</option>
+                            <option value="Potatoes">Potatoes</option>
+                            <option value="Cotton">Cotton</option>
+                            <option value="Barley">Barley</option>
+                            <option value="Sunflower">Sunflower</option>
+                            <option value="Coffee">Coffee</option>
+                        </select>
+                        <br>
+                        <label>Percentage of Land</label> <input name="percent_of_land" required class="input-class"type="number" step=".01" max="100" placeholder="Enter a value"/>
+                        <br>
+                        <label>Yield</label> <input name ="yield_in_kilos" required class="input-class"type="number" step=".01" placeholder="Enter a value"/>
+                        <br>
+                        <label>Revenue</label> <input name ="revenue" required class="input-class"type="number" placeholder="Enter a value"/>
+                        <br>
+                        <label>Profit</label> <input name="profit" required class="input-class"type="number" placeholder="Enter a value" />
+                        <br>
+                        <label>Market Value</label> <input name="market_value_per_kilo" required class="input-class"type="number" placeholder="Enter a value" />
+                        <br>
+                    </div>
+                    <div class="CDA-Soil">
+                        <label >Soil Type</label> 
+                        <select class="select-class" id="soil_type" name="soil_type" required>
+                            <option value="Red Soil">Red Soil</option>
+                            <option value="Black Soil">Black Soil</option>
+                            <option value="Sandy">Sandy</option>
+                            <option value="Clay">Clay</option>
+                            
+                        </select>
+                        <br>
+                        <label>Nitrogen</label> <input name="nitrogen" required class="input-class" type="number" step=".01" placeholder="Enter a value"/><br>
+                        <label>Phosphorus</label><input name="phosphorus" required class="input-class" type="number" step=".01" placeholder="Enter a value"/> <br>
+                        <label>Pottasium</label> <input name="pottasium" required class="input-class" type="number" step=".01" placeholder="Enter a value"/> <br>
+                        <label>Temperature</label> <input name="temp" required class="input-class" type="number" step=".01" placeholder="Enter a value"/> <br>
+                        <label>Humidity</label> <input name="humidity" required class="input-class" type="number" step=".01" placeholder="Enter a value"/> <br>
+                        <label>PH Value</label> <input name="ph" required class="input-class" type="number" step=".01" max="14" placeholder="Enter a value"/> <br>
+                        <label>Rainfall</label> <input name="rainfall" required class="input-class" type="number" step=".01" placeholder="Enter a value"/><br>
+                    </div>
+                </div>
+                <center><input type="submit" class = "button-class" value="Add Data"/></center>
+            </form>
+    
+        </div>
+
+    <style>
+        label {
+            width: 200px;
+        }
+        .CDA-container-inside{
+            display: flex;
+        }
+        .CDA-Crops, .CDA-Soil {
+            flex: 1; /* Flex property to make them share the available space equally */
+            padding: 10px; /* Just for spacing */
+        }
+        .CDA-Crops{
+            margin-left: 300px;
+        }
+        .select-class {
+            width: 200px;
+            height: 45px;
+            border-radius: 5px;
+            margin-left: 25px;
+        }
+        .input-class {
+            width: 300px;
+            height: 45px;
+            border-radius: 5px;
+            margin-left: 25px;
+        }
+        #year {
+            margin-right: 500px;
+        }
+        .button-class {
+            background-color: #196f3d;
+            width: 200px;
+            height: 75px;
+            color: white;
+            font-size: x-large;
+            border-color: #196f3d;
+            border-radius: 15px;
+        }
+        .button-class:hover {
+            transform: scale(1.1);
+            transition: 200ms;
+            background-color: white;
+            color:#196f3d;
+        }
+        .CDA-container-outside {
+            margin-top: 5vh;
+            background-color: white;
+            width: 80%;
+            height: 75%;
+            margin-left: 20vh;
+            border-radius: 30px;
+        }
+    </style>
+{% endblock body %}
