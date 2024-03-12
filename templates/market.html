@@ -18,26 +18,28 @@ Supplement Market
     <div class="col">
         <div class=" p-5 bg-white shadow rounded-lg" style="height: 95%;">
             <center>
-
+                
                 
                 {% if index==3 or index==5 or index==7 or index==11 or index==15 or index==18 or index==20 or
-                index==23 or
-                index==24 or index==25 or index==28 or index==38 %}
-
-
-
-                <h5>Fertilizer<b style="color: green;"> (Healthy):</b></h5>
-                {% else %}
-                <h5>Supplements<b style="color: red;"> (Diseased):</b></h5>
-                {% endif %}
-                <br>
-                <img src={{supplement_image[index]}} width="200" height="250">
-                <br>
-                <br>
-                <h6>For {{disease[index]}}</h6>
-                <p>{{supplement_name[index]}}</p>
-                
-            </center>
+                    index==23 or
+                    index==24 or index==25 or index==28 or index==38 %}
+                    
+                    
+                    
+                    <h5>Fertilizer<b style="color: green;"> (Healthy):</b></h5>
+                    {% else %}
+                    <h5>Supplements<b style="color: red;"> (Diseased):</b></h5>
+                    {% endif %}
+                    <br>
+                    <img src={{supplement_image[index]}} width="200" height="250">
+                    <br>
+                    <br>
+                    <h6>For {{disease[index]}}</h6>
+                    <p>{{supplement_name[index]}}</p>
+                    
+                    <a href="{{ buy[index] }}"> buy</a>
+                    
+                </center>
         </div>
     </div>
     {% endif %}
